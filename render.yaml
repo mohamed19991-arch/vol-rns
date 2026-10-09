@@ -1,0 +1,45 @@
+# Blueprint Render - deploiement du backend Django VOL-RNS
+# Documentation : https://render.com/docs/blueprint-spec
+#
+# Etapes :
+#   1. Pousser ce depot sur GitHub.
+#   2. Render -> New + -> Blueprint -> selectionner le depot.
+#   3. Renseigner DATABASE_URL (chaine de connexion Neon) quand Render le demande.
+#   4. Apres le premier deploiement, ouvrir le Shell du service et executer :
+#        python manage.py seed_initial_data --admin-email admin@vol-rns.local \
+#          --admin-password "MotDePasse!123"
+
+services:
+  - type: web
+    name: vol-rns-backend
+    runtime: python
+    plan: free
+    region: frankfurt
+    rootDir: backend
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    healthCheckPath: /api/schema/
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.6"
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_SSL_DISABLE
+        value: "False"
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: PASSWORD_RESET_RETURN_TOKEN
+        value: "False"
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CREDENTIALS_BASE64
+        sync: false

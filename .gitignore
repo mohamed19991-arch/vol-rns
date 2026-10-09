@@ -1,0 +1,62 @@
+# -----------------------------
+#  Python / Django (backend)
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Base de donnees locale (jamais en production)
+*.sqlite3
+db.sqlite3
+
+# Secrets et configuration locale : NE JAMAIS COMMITER
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+firebase-service-account.json
+google-services.json
+
+# Sauvegardes et fichiers generes
+backups/
+media/
+staticfiles/
+
+# -----------------------------
+#  Flutter / Dart (mobile)
+# -----------------------------
+mobile/.dart_tool/
+mobile/.packages
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/android/build/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/key.properties
+mobile/android/app/google-services.json
+mobile/ios/Pods/
+mobile/**/*.iml
+
+# -----------------------------
+#  Editeurs / OS
+# -----------------------------
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+#  Build Android local (SDK/caches specifiques a la machine)
+# -----------------------------
+.android-sdk/
+.pub-cache/
+.kotlin-daemon/
+.tools/
+dist/
+*.log
