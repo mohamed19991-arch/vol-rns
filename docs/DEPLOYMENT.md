@@ -244,21 +244,20 @@ Objectif : que le téléphone joigne le backend **sans que le PC soit allumé**.
 
 ### 15.1 Pousser le code sur GitHub
 
-Git n'est pas installé sur ce PC. Installez-le (<https://git-scm.com/download/win>)
-ou utilisez GitHub Desktop, puis :
+Git est disponible en version **portable** dans le projet
+(`.tools\PortableGit\cmd\git.exe`) : aucune installation système n'est
+nécessaire. Le dépôt est **déjà initialisé** et le code **déjà committé** ; il
+ne reste qu'à créer le dépôt distant et pousser :
 
 ```powershell
+$git = "c:\Users\Adm\Documents\trae_projects\VOL_RNS\.tools\PortableGit\cmd\git.exe"
 cd c:\Users\Adm\Documents\trae_projects\VOL_RNS
-git init
-git add .
-git commit -m "VOL-RNS : backend Django + application Flutter"
-git branch -M main
-git remote add origin https://github.com/<votre-compte>/vol-rns.git
-git push -u origin main
+& $git remote add origin https://github.com/<votre-compte>/vol-rns.git
+& $git push -u origin main
 ```
 
-> Le fichier `.env`, `dist/`, `.android-sdk/` et `.pub-cache/` sont exclus par
-> `.gitignore` : aucun secret ne sera publié.
+> Le fichier `.env`, `dist/`, `.tools/`, `.android-sdk/` et `.pub-cache/` sont
+> exclus par `.gitignore` : aucun secret ne sera publié.
 
 ### 15.2 Créer la base Neon
 
