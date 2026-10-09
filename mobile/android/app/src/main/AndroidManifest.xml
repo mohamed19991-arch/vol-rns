@@ -1,8 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Acces reseau : indispensable pour joindre l'API (absent des builds release par defaut). -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Notifications locales sur Android 13+ (le push FCM les utilise). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="vol_rns"
+        android:label="VOL-RNS"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".MainActivity"
             android:exported="true"
