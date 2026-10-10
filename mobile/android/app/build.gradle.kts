@@ -4,6 +4,13 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Firebase : le plugin n'est applique que si le fichier `google-services.json`
+// est present dans ce dossier. Sans lui, le build reste possible (les
+// notifications push sont simplement desactivees).
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "com.volrns.vol_rns"
     compileSdk = flutter.compileSdkVersion

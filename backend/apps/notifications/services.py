@@ -180,7 +180,15 @@ def send_push_to_users(users, *, title: str, body: str, data: dict | None = None
         notification=messaging.Notification(title=title, body=body),
         data=data,
         tokens=tokens,
-        android=messaging.AndroidConfig(priority="high"),
+        android=messaging.AndroidConfig(
+            priority="high",
+            # Cible le canal cree par l'application : importance haute + son.
+            notification=messaging.AndroidNotification(
+                channel_id="vol_rns_default",
+                default_sound=True,
+                default_vibrate_timings=True,
+            ),
+        ),
     )
 
     success = 0

@@ -331,4 +331,53 @@ Puis installez `mobile\build\app\outputs\flutter-apk\app-release.apk` sur le
 téléphone. **Attention** : un compte gratuit Render met le service en veille
 après ~15 min d'inactivité ; le premier appel peut prendre ~30 à 60 s.
 
+## 16. Activer les notifications push (annonces avec son)
+
+Sans cette configuration, l'application fonctionne normalement mais **aucune
+notification push n'est envoyée** (les jetons FCM ne peuvent pas être obtenus).
+
+### 16.1 Côté téléphone (Firebase Android)
+
+1. <https://console.firebase.google.com> → **Ajouter un projet** (ex. `vol-rns`).
+2. Dans le projet → **Ajouter une application** → **Android**.
+3. **Nom du package Android** : `com.volrns.vol_rns` — exactement, sinon le
+   fichier fourni par Firebase est inutilisable.
+4. Téléchargez **`google-services.json`**.
+5. Placez-le dans `mobile/android/app/google-services.json`.
+
+> Le plugin Gradle `com.google.gms.google-services` n'est appliqué que si ce
+> fichier est présent : le build reste possible sans lui (push simplement
+> désactivé).
+
+### 16.2 Côté serveur (compte de service Firebase)
+
+1. Console Firebase → ⚙️ **Paramètres du projet** → onglet **Comptes de service**.
+2. **Générer une nouvelle clé privée** → un fichier `.json` est téléchargé.
+3. Convertissez-le en base64 (PowerShell) :
+
+```powershell
+$b = [Convert]::ToBase64String([IO.File]::ReadAllBytes("C:\chemin\vers\serviceAccount.json"))
+Set-Clipboard $b   # la valeur est copiée dans le presse-papier
+```
+
+4. Render → service `vol-rns-backend` → **Environment** → ajoutez :
+   - `FIREBASE_PROJECT_ID` → l'identifiant du projet (ex. `vol-rns`)
+   - `FIREBASE_CREDENTIALS_BASE64` → la valeur copiée à l'étape 3
+5. **Save** : Render redéploie automatiquement.
+
+> Ne committez jamais ce fichier : `firebase-service-account.json` est déjà
+> exclu par `.gitignore`.
+
+### 16.3 Vérifier
+
+1. Reconstruisez et réinstallez l'APK (voir 15.6).
+2. Au premier lancement, Android demande **« Autoriser les notifications ? »** —
+   acceptez.
+3. Connectez-vous, puis depuis un compte agent publiez une annonce.
+4. La notification arrive **avec son** (canal `vol_rns_default`, importance
+   haute) sur les appareils connectés.
+
+> Les envois sont journalisés côté serveur : en cas d'échec, consultez les logs
+> Render (`Firebase non configure` = credentials manquantes).
+
 

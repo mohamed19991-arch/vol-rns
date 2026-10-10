@@ -29,8 +29,13 @@ Future<void> main() async {
   final devicesApi = DevicesApi(dioClient);
   final fcmService = FcmService(devicesApi);
 
+  // Notifications locales (canal avec son + autorisation) : fonctionne meme
+  // si Firebase n'est pas configure (demande l'autorisation des le 1er lancement).
+  await fcmService.init();
+
+  // Reception/envoi push : uniquement si Firebase est configure.
   if (firebaseReady) {
-    await fcmService.init();
+    await fcmService.initPush();
   }
 
   runApp(
