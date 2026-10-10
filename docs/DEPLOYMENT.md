@@ -283,21 +283,30 @@ chaque déploiement.
 
 ### 15.4 Compte administrateur et données
 
-Dans Render → votre service → **Shell** :
+Le **Shell n'existe pas sur l'offre gratuite Render**. On crée donc les données
+**depuis le PC**, en pointant `DATABASE_URL` vers la base Neon (Neon est
+accessible depuis Internet) :
 
-```bash
-python manage.py seed_initial_data \
-  --admin-email admin@vol-rns.local \
+```powershell
+cd c:\Users\Adm\Documents\trae_projects\VOL_RNS\backend
+$env:DATABASE_URL="postgresql://neondb_owner:XXX@ep-xxx.eu-central-1.aws.neon.tech/neondb?sslmode=require"
+.\.venv\Scripts\python.exe manage.py migrate
+.\.venv\Scripts\python.exe manage.py seed_initial_data `
+  --admin-email admin@vol-rns.local `
   --admin-password "ChangerCeMotDePasse!123"
 ```
 
-Pour reprendre les données créées localement :
+`migrate` et `seed_initial_data` sont **idempotents** : on peut les relancer
+sans risque. Une fois le service Render **Live**, le même compte fonctionne
+dans l'application.
 
-```bash
-# sur le PC (SQLite)
-python manage.py backup_data --output backup.json
-# puis dans le Shell Render (apres avoir committe/televerse backup.json)
-python manage.py loaddata backup.json
+Pour reprendre les données créées localement (SQLite) :
+
+```powershell
+# 1. sur le PC (SQLite)
+.\.venv\Scripts\python.exe manage.py backup_data --output backup.json
+# 2. avec DATABASE_URL = Neon (base hebergee)
+.\.venv\Scripts\python.exe manage.py loaddata backup.json
 ```
 
 ### 15.5 Vérifier

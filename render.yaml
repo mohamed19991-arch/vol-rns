@@ -5,7 +5,10 @@
 #   1. Pousser ce depot sur GitHub.
 #   2. Render -> New + -> Blueprint -> selectionner le depot.
 #   3. Renseigner DATABASE_URL (chaine de connexion Neon) quand Render le demande.
-#   4. Apres le premier deploiement, ouvrir le Shell du service et executer :
+#   4. Le Shell n'existe pas sur l'offre gratuite Render : creer le compte
+#      administrateur DEPUIS LE PC, en pointant DATABASE_URL vers Neon :
+#        $env:DATABASE_URL="postgresql://...?sslmode=require"
+#        python manage.py migrate
 #        python manage.py seed_initial_data --admin-email admin@vol-rns.local \
 #          --admin-password "MotDePasse!123"
 
